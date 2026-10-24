@@ -5,6 +5,8 @@ package hai704i.hotel.depot;
 import hai704i.hotel.metier.Modeles.*;
 import hai704i.hotel.depot.Depots.*;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +38,15 @@ public final class DepotsMemoire {
 
     public static class DevisMemoire implements DevisRepository {
         private final Map<String, Devis> devis = new ConcurrentHashMap<>();
+        private final Clock horloge;
+
+        // Se debarasser des devis qui ont expiré
+        public DevisMemoire() { this(Clock.systemUTC()); }
+        public DevisMemoire(Clock horloge) { this.horloge = horloge; }
+
         @Override public void enregistrer(Devis d) {
+            Instant maintenant = horloge.instant();
+            devis.values().removeIf(x -> x.expireA().isBefore(maintenant));
             devis.put(d.id(), d);
         }
         @Override public Optional<Devis> trouver(String id) {
