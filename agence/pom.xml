@@ -37,7 +37,7 @@
                 <configuration>
                     <wsdlDirectory>${project.basedir}/src/main/resources/wsdl</wsdlDirectory>
                     <wsdlFiles><wsdlFile>hotel.wsdl</wsdlFile></wsdlFiles>
-                    <packageName>fr.umontpellier.hai704i.agence.acces.client</packageName>
+                    <packageName>hai704i.agence.acces.client</packageName>
                     <sourceDestDir>${project.build.directory}/generated-sources/wsimport</sourceDestDir>
                     <keep>true</keep>
                 </configuration>
