@@ -20,13 +20,13 @@ public class HotelPortImpl implements HotelPort {
     }
 
     @Override
-    public List<Offre> chercherOffres(Demande demande) {
+    public List<Offre> chercherOffres(Demande demande) throws RefusMetierException {
         try {
             return service.rechercher(Conversions.versCritere(demande)).stream()
                     .map(d -> Conversions.versOffre(d, service.info()))
                     .toList();
         } catch (Refus r) {
-            throw new RuntimeException(r.getMessage()); // provisoire, remplacé en A3
+            throw Conversions.versFaute(r);
         }
     }
 }

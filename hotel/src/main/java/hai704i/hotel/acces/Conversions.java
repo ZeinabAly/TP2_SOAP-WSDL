@@ -7,6 +7,8 @@ import hai704i.hotel.Offre;
 import hai704i.hotel.metier.Modeles.*;
 import hai704i.hotel.metier.Motif;
 import hai704i.hotel.metier.Refus;
+
+import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -26,6 +28,11 @@ public final class Conversions {
         } catch (DatatypeConfigurationException e) {
             throw new ExceptionInInitializerError(e);
         }
+    }
+
+    static RefusMetierException versFaute(Refus r) {
+        CodeRefus code = CodeRefus.valueOf(r.motif().name());
+        return new RefusMetierException(r.getMessage(), new RefusMetier(code, r.getMessage()));
     }
 
     private Conversions() { }
@@ -53,9 +60,13 @@ public final class Conversions {
 
     private static LocalDate date(XMLGregorianCalendar c) throws Refus {
         if (c == null) {
-            throw new Refus(Motif.DEMANDE_INVALIDE, "Date manquante.");
+            throw new Refus(Motif.DEMANDE_INVALIDE, "Date manquante");
         }
-        return LocalDate.of(c.getYear(), c.getMonth(), c.getDay());
+        try {
+            return LocalDate.of(c.getYear(), c.getMonth(), c.getDay());
+        } catch (DateTimeException e) {
+            throw new Refus(Motif.DEMANDE_INVALIDE, "Date invalide " );
+        }
     }
 
     private static XMLGregorianCalendar xml(LocalDate d) {

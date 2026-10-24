@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.umontpellier.hai704i</groupId>
-    <artifactId>TP2_SOAP_WSDL_INTLJ</artifactId>
+    <artifactId>hotel</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -15,11 +15,22 @@
     </properties>
 
     <dependencies>
-        <!-- Implémentation Metro -->
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
             <version>4.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.14.0</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
