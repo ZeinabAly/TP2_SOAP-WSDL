@@ -9,6 +9,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -55,8 +56,20 @@ public final class DepotsMemoire {
     }
 
     public static class ReservationsMemoire implements ReservationRepository {
+        private final List<Reservation> reservations = new CopyOnWriteArrayList<>();
+
+        @Override public void enregistrer(Reservation r) { reservations.add(r); }
+
+        @Override public Optional<Reservation> parDemande(String idAgence, String idDemande) {
+            return reservations.stream()
+                    .filter(r -> r.idAgence().equals(idAgence) && r.idDemande().equals(idDemande))
+                    .findFirst();
+        }
+
         @Override public boolean chambreOccupee(String numero, LocalDate arrivee, LocalDate depart) {
-            return false; // aucune réservation tant que A5 n'est pas fait
+            // Deux séjours se chevauchent ssi arrivée1 < départ2 ET arrivée2 < départ1.
+            return reservations.stream().anyMatch(r -> r.numeroChambre().equals(numero)
+                    && r.arrivee().isBefore(depart) && arrivee.isBefore(r.depart()));
         }
     }
 }

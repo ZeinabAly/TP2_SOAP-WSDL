@@ -1,6 +1,7 @@
 package hai704i.hotel;
 
 
+import hai704i.hotel.metier.SecretHasher;
 import jakarta.xml.ws.Endpoint;
 
 
@@ -38,13 +39,17 @@ public class Main {
 
         List<Chambre> chambres = new ArrayList<>();
         AgencesMemoire agences = new AgencesMemoire();
+
+
         for (String cle : p.stringPropertyNames()) {
             if (cle.startsWith("chambre.")) {
                 String[] t = p.getProperty(cle).split(";");
                 chambres.add(new Chambre(t[0].trim(), Integer.parseInt(t[1].trim()), new BigDecimal(t[2].trim())));
             } else if (cle.startsWith("agence.") && cle.endsWith(".coefficient")) {
                 String id = cle.substring("agence.".length(), cle.length() - ".coefficient".length());
-                agences.ajouter(new Agence(id, new BigDecimal(p.getProperty(cle).trim())));
+                byte[] sel = SecretHasher.nouveauSel();
+                byte[] empreinte = SecretHasher.empreinte(p.getProperty("agence." + id + ".secret").trim().toCharArray(), sel);
+                agences.ajouter(new Agence(id, sel, empreinte, new BigDecimal(p.getProperty(cle).trim())));
             }
         }
 

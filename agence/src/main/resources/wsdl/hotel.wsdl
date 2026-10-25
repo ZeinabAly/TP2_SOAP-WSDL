@@ -4,16 +4,27 @@
             <xsd:import namespace="http://hotel.hai704i" schemaLocation="hotel.xsd"/>
         </xsd:schema>
     </types>
+    <message name="reserver">
+        <part name="parameters" element="tns:reserver"/>
+    </message>
+    <message name="reserverResponse">
+        <part name="parameters" element="tns:reserverResponse"/>
+    </message>
+    <message name="RefusMetierException">
+        <part name="fault" element="tns:RefusMetier"/>
+    </message>
     <message name="chercherOffres">
         <part name="parameters" element="tns:chercherOffres"/>
     </message>
     <message name="chercherOffresResponse">
         <part name="parameters" element="tns:chercherOffresResponse"/>
     </message>
-    <message name="RefusMetierException">
-        <part name="fault" element="tns:RefusMetier"/>
-    </message>
     <portType name="HotelPort">
+        <operation name="reserver">
+            <input wsam:Action="http://hotel.hai704i/HotelPort/reserverRequest" message="tns:reserver"/>
+            <output wsam:Action="http://hotel.hai704i/HotelPort/reserverResponse" message="tns:reserverResponse"/>
+            <fault message="tns:RefusMetierException" name="RefusMetierException" wsam:Action="http://hotel.hai704i/HotelPort/reserver/Fault/RefusMetierException"/>
+        </operation>
         <operation name="chercherOffres">
             <input wsam:Action="http://hotel.hai704i/HotelPort/chercherOffresRequest" message="tns:chercherOffres"/>
             <output wsam:Action="http://hotel.hai704i/HotelPort/chercherOffresResponse" message="tns:chercherOffresResponse"/>
@@ -22,6 +33,18 @@
     </portType>
     <binding name="HotelSoapPortBinding" type="tns:HotelPort">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="reserver">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="RefusMetierException">
+                <soap:fault name="RefusMetierException" use="literal"/>
+            </fault>
+        </operation>
         <operation name="chercherOffres">
             <soap:operation soapAction=""/>
             <input>

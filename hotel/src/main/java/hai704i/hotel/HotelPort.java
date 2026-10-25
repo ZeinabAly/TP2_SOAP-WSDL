@@ -1,5 +1,7 @@
 package hai704i.hotel;
 
+import hai704i.hotel.acces.Confirmation;
+import hai704i.hotel.acces.DemandeReservation;
 import hai704i.hotel.acces.RefusMetierException;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
@@ -13,4 +15,10 @@ public interface HotelPort {
     @WebMethod(operationName = "chercherOffres")
     @WebResult(name = "offre")
     List<Offre> chercherOffres(@WebParam(name = "demande") Demande demande) throws RefusMetierException;
+
+
+    @WebMethod
+    @WebResult(name = "confirmation")
+    Confirmation reserver(@WebParam(name = "reservation") DemandeReservation reservation)
+            throws RefusMetierException;
 }

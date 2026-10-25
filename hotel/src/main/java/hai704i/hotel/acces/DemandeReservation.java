@@ -69,4 +69,8 @@ public class DemandeReservation {
     public void setPaiement(Paiement paiement) {
         this.paiement = paiement;
     }
+
+    public Authentication getAuthentification() {
+        return authentication;
+    }
 }

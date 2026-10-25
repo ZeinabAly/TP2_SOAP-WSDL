@@ -29,4 +29,14 @@ public class HotelPortImpl implements HotelPort {
             throw Conversions.versFaute(r);
         }
     }
+
+    @Override
+    public Confirmation reserver(DemandeReservation reservation) throws RefusMetierException {
+        try {
+            return Conversions.versConfirmation(
+                    service.reserver(Conversions.versCommande(reservation)), service.info());
+        } catch (Refus r) {
+            throw Conversions.versFaute(r);
+        }
+    }
 }

@@ -6,6 +6,77 @@
 
     <xs:element name="chercherOffresResponse" type="tns:chercherOffresResponse"/>
 
+    <xs:element name="reserver" type="tns:reserver"/>
+
+    <xs:element name="reserverResponse" type="tns:reserverResponse"/>
+
+    <xs:complexType name="reserver">
+        <xs:sequence>
+            <xs:element name="reservation" type="tns:demandeReservation" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="demandeReservation">
+        <xs:sequence>
+            <xs:element name="idDemande" type="xs:string"/>
+            <xs:element name="authentication" type="tns:authentication"/>
+            <xs:element name="idOffre" type="xs:string"/>
+            <xs:element name="voyageur" type="tns:voyageur"/>
+            <xs:element name="paiement" type="tns:paiement"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="authentication">
+        <xs:sequence>
+            <xs:element name="idAgence" type="xs:string"/>
+            <xs:element name="secret" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="voyageur">
+        <xs:sequence>
+            <xs:element name="nom" type="xs:string"/>
+            <xs:element name="prenom" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="paiement">
+        <xs:sequence>
+            <xs:element name="numeroCarte" type="xs:string"/>
+            <xs:element name="moisExpiration" type="xs:int"/>
+            <xs:element name="anneeExpiration" type="xs:int"/>
+            <xs:element name="cvc" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="reserverResponse">
+        <xs:sequence>
+            <xs:element name="confirmation" type="tns:confirmation" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="confirmation">
+        <xs:sequence>
+            <xs:element name="reference" type="xs:string"/>
+            <xs:element name="idDemande" type="xs:string"/>
+            <xs:element name="idOffre" type="xs:string"/>
+            <xs:element name="nomHotel" type="xs:string"/>
+            <xs:element name="chambre" type="xs:string"/>
+            <xs:element name="dateArrivee" type="xs:date"/>
+            <xs:element name="dateDepart" type="xs:date"/>
+            <xs:element name="prixTotal" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="carteMasquee" type="xs:string"/>
+            <xs:element name="dejaEnregistree" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="refusMetier">
+        <xs:sequence>
+            <xs:element name="code" type="tns:codeRefus"/>
+            <xs:element name="message" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
     <xs:complexType name="chercherOffres">
         <xs:sequence>
             <xs:element name="demande" type="tns:demande" minOccurs="0"/>
@@ -46,17 +117,16 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="refusMetier">
-        <xs:sequence>
-            <xs:element name="code" type="tns:codeRefus"/>
-            <xs:element name="message" type="xs:string"/>
-        </xs:sequence>
-    </xs:complexType>
-
     <xs:simpleType name="codeRefus">
         <xs:restriction base="xs:string">
             <xs:enumeration value="AGENCE_INCONNUE"/>
             <xs:enumeration value="DEMANDE_INVALIDE"/>
+            <xs:enumeration value="SECRET_INVALIDE"/>
+            <xs:enumeration value="PAIEMENT_INVALIDE"/>
+            <xs:enumeration value="OFFRE_INCONNUE"/>
+            <xs:enumeration value="OFFRE_EXPIREE"/>
+            <xs:enumeration value="OFFRE_INDISPONIBLE"/>
+            <xs:enumeration value="DEMANDE_INCOHERENTE"/>
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

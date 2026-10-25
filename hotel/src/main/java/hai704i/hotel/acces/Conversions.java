@@ -77,4 +77,31 @@ public final class Conversions {
     private static XMLGregorianCalendar xml(Instant i) {
         return FABRIQUE.newXMLGregorianCalendar(GregorianCalendar.from(i.atZone(ZoneOffset.UTC)));
     }
+
+    static CommandeReservation versCommande(DemandeReservation r) throws Refus {
+        if (r == null || r.getAuthentification() == null || r.getVoyageur() == null) {
+            throw new Refus(Motif.DEMANDE_INVALIDE, "Demande de réservation incomplète.");
+        }
+        Paiement p = r.getPaiement();
+        DonneesPaiement paiement = p == null ? null
+                : new DonneesPaiement(p.getNumeroCarte(), p.getMoisExpiration(), p.getAnneeExpiration(), p.getCvc());
+        return new CommandeReservation(r.getAuthentification().getIdAgence(), r.getAuthentification().getSecret(),
+                r.getIdDemande(), r.getIdOffre(), r.getVoyageur().getNom(), r.getVoyageur().getPrenom(), paiement);
+    }
+
+    static Confirmation versConfirmation(ConfirmationMetier c, InfoHotel hotel) {
+        Reservation r = c.reservation();
+        Confirmation x = new Confirmation();
+        x.setReference(r.reference());
+        x.setIdDemande(r.idDemande());
+        x.setIdOffre(r.idOffre());
+        x.setNomHotel(hotel.nom());
+        x.setChambre(r.numeroChambre());
+        x.setDateArrivee(xml(r.arrivee()));
+        x.setDateDepart(xml(r.depart()));
+        x.setPrixTotal(r.prixTotal());
+        x.setCarteMasquee(r.carteMasquee());
+        x.setDejaEnregistree(c.rejeu());
+        return x;
+    }
 }

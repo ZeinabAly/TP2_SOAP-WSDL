@@ -3,6 +3,7 @@ package hai704i.agence.acces;
 // La seule classe qui importe les classes générées
 
 import hai704i.agence.acces.client.*;
+import hai704i.agence.acces.client.Voyageur;
 import hai704i.agence.logique.HotelGateway;
 import hai704i.agence.logique.Types.*;
 import jakarta.xml.ws.BindingProvider;
@@ -107,4 +108,38 @@ public class HotelSoapGateway implements HotelGateway {
     private static LocalDate date(XMLGregorianCalendar c) {
         return LocalDate.of(c.getYear(), c.getMonth(), c.getDay());
     }
+
+    @Override
+    public synchronized ConfirmationAgence reserver(ReservationDemandee r) throws RefusHotel, HotelInjoignable {
+        try {
+            Authentication auth = new Authentication();
+            auth.setIdAgence(idAgence);
+            auth.setSecret(secret);
+            Voyageur v = new Voyageur();           // attention : celui du paquetage ...acces.client
+            v.setNom(r.voyageur().nom());
+            v.setPrenom(r.voyageur().prenom());
+            Paiement p = new Paiement();
+            p.setNumeroCarte(r.carte().numero());
+            p.setMoisExpiration(r.carte().mois());
+            p.setAnneeExpiration(r.carte().annee());
+            p.setCvc(r.carte().cvc());
+            DemandeReservation dr = new DemandeReservation();
+            dr.setIdDemande(r.idDemande());
+            //dr.setAuthentification(auth);
+            dr.setIdOffre(r.offre().idOffre());
+            dr.setVoyageur(v);
+            dr.setPaiement(p);
+
+            Confirmation c = port().reserver(dr);
+            return new ConfirmationAgence(c.getReference(), c.getNomHotel(), c.getChambre(),
+                    date(c.getDateArrivee()), date(c.getDateDepart()), c.getPrixTotal(),
+                    c.getCarteMasquee(), c.isDejaEnregistree());
+        } catch (RefusMetierException e) {
+            throw new RefusHotel(e.getFaultInfo().getCode().name(), e.getFaultInfo().getMessage());
+        } catch (WebServiceException e) {
+            throw new HotelInjoignable(adresse, causeLisible(e));
+        }
+    }
+
+
 }

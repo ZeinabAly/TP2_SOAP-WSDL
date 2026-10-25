@@ -7,4 +7,5 @@ import java.util.List;
 public interface HotelGateway {
     String nom();
     List<OffreAgence> chercher(Sejour sejour) throws RefusHotel, HotelInjoignable;
+    ConfirmationAgence reserver(ReservationDemandee demande) throws RefusHotel, HotelInjoignable;
 }
