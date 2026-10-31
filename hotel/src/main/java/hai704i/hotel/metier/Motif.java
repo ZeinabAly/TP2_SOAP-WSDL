@@ -8,5 +8,6 @@ public enum Motif {
     OFFRE_INCONNUE,
     OFFRE_EXPIREE,
     OFFRE_INDISPONIBLE,
-    DEMANDE_INCOHERENTE
+    DEMANDE_INCOHERENTE,
+    // CHAMBRE_INCONNUE //Pour la partie C
 }

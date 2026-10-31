@@ -1,17 +1,23 @@
 package hai704i.agence;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import hai704i.agence.acces.HotelSoapGateway;
+import hai704i.agence.logique.AgenceService;
+import hai704i.agence.logique.HotelGateway;
+import hai704i.agence.logique.Types.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+
 public class Main {
     static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
-
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+        List<HotelGateway> hotels = List.of(
+                new HotelSoapGateway("http://localhost:8081/hotel", "AG-01", "demo-secret-01", 3000),
+                new HotelSoapGateway("http://localhost:8082/hotel", "AG-01", "demo-secret-01", 3000));
+        try (AgenceService a = new AgenceService(hotels, 3000)) {
+            ResultatRecherche r = a.rechercher(new Sejour("Montpellier", LocalDate.of(2026, 11, 10), LocalDate.of(2026, 11, 13), 2, 0, null));
+            r.offres().forEach(o -> System.out.println(o.nomHotel() + " " + o.prixTotal()));
+            r.incidents().forEach(i -> System.out.println("INCIDENT : " + i));
         }
     }
 }

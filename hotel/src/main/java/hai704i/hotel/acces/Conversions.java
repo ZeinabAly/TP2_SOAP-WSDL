@@ -65,7 +65,7 @@ public final class Conversions {
         try {
             return LocalDate.of(c.getYear(), c.getMonth(), c.getDay());
         } catch (DateTimeException e) {
-            throw new Refus(Motif.DEMANDE_INVALIDE, "Date invalide " );
+            throw new Refus(Motif.DEMANDE_INVALIDE, "Date invalide" );
         }
     }
 

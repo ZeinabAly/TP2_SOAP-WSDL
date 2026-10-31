@@ -15,13 +15,17 @@ public class RefusMetier {
     @XmlElement(required = true)
     private String message;
 
-    public RefusMetier() { }   // obligatoire pour JAXB
+    public RefusMetier() { }
 
     public RefusMetier(CodeRefus code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public CodeRefus getCode() { return code; }
-    public String getMessage() { return message; }
+    public CodeRefus getCode() {
+        return code;
+    }
+    public String getMessage() {
+        return message;
+    }
 }

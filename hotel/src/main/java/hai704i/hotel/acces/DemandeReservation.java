@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {
         "idDemande",
-        "authentication",
+        "authentification",
         "idOffre",
         "voyageur",
         "paiement"
@@ -16,7 +16,7 @@ public class DemandeReservation {
     private String idDemande;
 
     @XmlElement(required = true)
-    private Authentication authentication;
+    private Authentification authentification;
 
     @XmlElement(required = true)
     private String idOffre;
@@ -38,12 +38,12 @@ public class DemandeReservation {
         this.idDemande = idDemande;
     }
 
-    public Authentication getAuthentication() {
-        return authentication;
+    public Authentification getAuthentification() {
+        return authentification;
     }
 
-    public void setAuthentication(Authentication authentication) {
-        this.authentication = authentication;
+    public void setAuthentication(Authentification authentification) {
+        this.authentification = authentification;
     }
 
     public String getIdOffre() {
@@ -70,7 +70,4 @@ public class DemandeReservation {
         this.paiement = paiement;
     }
 
-    public Authentication getAuthentification() {
-        return authentication;
-    }
 }

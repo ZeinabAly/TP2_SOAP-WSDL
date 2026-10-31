@@ -36,25 +36,25 @@ public class HotelService {
         return info;
     }
 
-    public List<Devis> rechercher(Critere c) throws Refus {
-        Agence agence = agences.trouver(c.idAgence())
-                .orElseThrow(() -> new Refus(Motif.AGENCE_INCONNUE, "Agence inconnue : " + c.idAgence()));
-        verifier(c);
+    public List<Devis> rechercher(Critere critere) throws Refus {
+        Agence agence = agences.trouver(critere.idAgence())
+                .orElseThrow(() -> new Refus(Motif.AGENCE_INCONNUE, "Agence inconnue : " + critere.idAgence()));
+        verifier(critere);
 
         // Pas la bonne ville ou pas assez d'étoiles : liste vide, ce n'est PAS un refus.
-        if (!info.ville().equalsIgnoreCase(c.ville().trim()) || info.etoiles() < c.etoilesMin()) {
+        if (!info.ville().equalsIgnoreCase(critere.ville().trim()) || info.etoiles() < critere.etoilesMin()) {
             return List.of();
         }
 
-        long nuits = ChronoUnit.DAYS.between(c.arrivee(), c.depart());
+        long nuits = ChronoUnit.DAYS.between(critere.arrivee(), critere.depart());
         Instant expire = horloge.instant().plus(VALIDITE_DEVIS);
         List<Devis> offres = new ArrayList<>();
 
         for (Chambre ch : chambres.toutes()) {
-            if (ch.capacite() < c.personnes()) {
+            if (ch.capacite() < critere.personnes()) {
                 continue;
             }
-            if (reservations.chambreOccupee(ch.numero(), c.arrivee(), c.depart())) {
+            if (reservations.chambreOccupee(ch.numero(), critere.arrivee(), critere.depart())) {
                 continue;
             }
             // prix = prix de base x nombre de nuits x coefficient de CETTE agence
@@ -62,11 +62,11 @@ public class HotelService {
                     .multiply(BigDecimal.valueOf(nuits))
                     .multiply(agence.coefficient())
                     .setScale(2, RoundingMode.HALF_UP);
-            if (c.prixMax() != null && prix.compareTo(c.prixMax()) > 0) {
+            if (critere.prixMax() != null && prix.compareTo(critere.prixMax()) > 0) {
                 continue;
             }
             Devis d = new Devis("OF-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase(),
-                    agence.id(), ch.numero(), ch.capacite(), c.arrivee(), c.depart(), prix, expire);
+                    agence.id(), ch.numero(), ch.capacite(), critere.arrivee(), critere.depart(), prix, expire);
             devis.enregistrer(d);
             offres.add(d);
         }
@@ -74,15 +74,15 @@ public class HotelService {
         return offres;
     }
 
-    private void verifier(Critere c) throws Refus {
-        if (c.ville() == null || c.ville().isBlank()) {
+    private void verifier(Critere critere) throws Refus {
+        if (critere.ville() == null || critere.ville().isBlank()) {
             throw new Refus(Motif.DEMANDE_INVALIDE, "La ville est obligatoire.");
         }
-        if (c.arrivee() == null || c.depart() == null || !c.depart().isAfter(c.arrivee())) {
+        if (critere.arrivee() == null || critere.depart() == null || !critere.depart().isAfter(critere.arrivee())) {
             throw new Refus(Motif.DEMANDE_INVALIDE, "Le départ doit être après l'arrivée.");
         }
-        if (c.personnes() < 1) {
-            throw new Refus(Motif.DEMANDE_INVALIDE, "Au moins une personne.");
+        if (critere.personnes() < 1) {
+            throw new Refus(Motif.DEMANDE_INVALIDE, "Au moins une personne");
         }
     }
 

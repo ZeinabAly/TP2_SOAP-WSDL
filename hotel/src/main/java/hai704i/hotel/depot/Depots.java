@@ -23,7 +23,7 @@ public final class Depots {
         Optional<Devis> trouver(String id);
     }
 
-    // En A5 on ajoutera enregistrer(...) et parDemande(...).
+
     public interface ReservationRepository {
         boolean chambreOccupee(String numeroChambre, LocalDate arrivee, LocalDate depart);
         void enregistrer(Reservation r);

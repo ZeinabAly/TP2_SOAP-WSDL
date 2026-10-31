@@ -4,7 +4,7 @@ import jakarta.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {"idAgence", "secret"})
-public class Authentication {
+public class Authentification {
 
     @XmlElement(required = true)
     private String idAgence;
@@ -12,7 +12,7 @@ public class Authentication {
     @XmlElement(required = true)
     private String secret;
 
-    public Authentication() {
+    public Authentification() {
     }
 
     public String getIdAgence() {
@@ -30,4 +30,5 @@ public class Authentication {
     public void setSecret(String secret) {
         this.secret = secret;
     }
+
 }
