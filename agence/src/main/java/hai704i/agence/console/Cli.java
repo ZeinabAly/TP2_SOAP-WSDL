@@ -43,7 +43,7 @@ public class Cli {
                     case "2" -> afficherOffres();
                     case "3" -> reserver();
                     case "0" -> { sortie.println("Au revoir."); return; }
-                    default -> sortie.println("Choix inconnu : tapez 0, 1, 2 ou 3.");
+                    default -> sortie.println("Choix inconnu : tapez 0, 1, 2 ou 3");
                 }
             }
         } catch (FinDeSaisie e) {
@@ -76,7 +76,7 @@ public class Cli {
 
     private void afficherOffres() {
         if (dernieresOffres.isEmpty()) {
-            sortie.println("Aucune offre à afficher.");
+            sortie.println("Aucune offre à afficher - Faites d'abord une recherche (option 1)");
             return;
         }
         DateTimeFormatter heure = DateTimeFormatter.ofPattern("HH:mm");
@@ -100,7 +100,7 @@ public class Cli {
 
         sortie.println("Voyageur principal :");
         Voyageur voyageur = new Voyageur(lireNonVide("  Nom"), lireNonVide("  Prénom"));
-        sortie.println("Paiement — N'UTILISEZ QUE DES NUMÉROS FICTIFS (ex. 4111 1111 1111 1111) :");
+        sortie.println("Paiement - N'UTILISEZ QUE DES NUMÉROS FICTIFS (ex. 4111 1111 1111 1111) :");
         Carte carte = new Carte(lireNonVide("  Numéro de carte"),
                 lireEntier("  Mois d'expiration (1-12)", 1, 12),
                 lireEntier("  Année d'expiration (ex. 2030)", 2000, 2100),

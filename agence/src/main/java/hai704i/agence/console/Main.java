@@ -17,8 +17,9 @@ public final class Main {
     private Main() { }
 
     public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            System.err.println("Usage : Main <fichier-de-configuration.properties>");
+        // Ajout de 2e argument pour l'interface graphique
+        if (args.length < 1 || args.length > 2) {
+            System.err.println("Usage : Main <fichier-de-configuration.properties> [--gui]");
             System.exit(2);
         }
         Properties p = new Properties();
@@ -42,6 +43,14 @@ public final class Main {
             System.err.println("Aucun hôtel configuré (clés hotel.1, hotel.2, ...).");
             System.exit(2);
         }
+
+        // Lancer l'interface
+        if (args.length == 2 && args[1].equals("--gui")) {
+            // Même logique d'agence, autre interface. La fenêtre ferme le service à sa fermeture.
+            new GuiPartieD(new AgenceService(hotels, delaiMs), idAgence).afficher();
+            return;
+        }
+
         try (AgenceService agence = new AgenceService(hotels, delaiMs)) {
             new Cli(agence, idAgence).lancer();
         }

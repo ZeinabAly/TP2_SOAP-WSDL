@@ -112,7 +112,7 @@ public class HotelSoapGateway implements HotelGateway {
     @Override
     public synchronized ConfirmationAgence reserver(ReservationDemandee r) throws RefusHotel, HotelInjoignable {
         try {
-            Authentication auth = new Authentication();
+            Authentification auth = new Authentification();
             auth.setIdAgence(idAgence);
             auth.setSecret(secret);
             Voyageur v = new Voyageur();           // attention : celui du paquetage ...acces.client
@@ -125,7 +125,7 @@ public class HotelSoapGateway implements HotelGateway {
             p.setCvc(r.carte().cvc());
             DemandeReservation dr = new DemandeReservation();
             dr.setIdDemande(r.idDemande());
-            //dr.setAuthentification(auth);
+            dr.setAuthentification(auth);
             dr.setIdOffre(r.offre().idOffre());
             dr.setVoyageur(v);
             dr.setPaiement(p);

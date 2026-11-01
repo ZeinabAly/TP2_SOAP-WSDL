@@ -42,6 +42,10 @@ public class DemandeReservation {
         return authentification;
     }
 
+    public void setAuthentification(Authentification auth) {
+        this.authentification = auth;
+    }
+
     public void setAuthentication(Authentification authentification) {
         this.authentification = authentification;
     }

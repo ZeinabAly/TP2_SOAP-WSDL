@@ -19,14 +19,14 @@
     <xs:complexType name="demandeReservation">
         <xs:sequence>
             <xs:element name="idDemande" type="xs:string"/>
-            <xs:element name="authentication" type="tns:authentication"/>
+            <xs:element name="authentification" type="tns:authentification"/>
             <xs:element name="idOffre" type="xs:string"/>
             <xs:element name="voyageur" type="tns:voyageur"/>
             <xs:element name="paiement" type="tns:paiement"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="authentication">
+    <xs:complexType name="authentification">
         <xs:sequence>
             <xs:element name="idAgence" type="xs:string"/>
             <xs:element name="secret" type="xs:string"/>
